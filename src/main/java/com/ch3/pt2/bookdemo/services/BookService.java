@@ -33,6 +33,7 @@ public class BookService {
             return null;
         }
     }
+    
     // update a book
     public Book updateBook(Long id, String title, String desc, String lang, Integer numOfPages) {
     	Book book = findBook(id);
@@ -48,12 +49,6 @@ public class BookService {
 	public void deleteById(Long id) {
 		bookRepository.deleteById(id);
 	}
-	
-	
-
-	
-    
-    
     
     
 }
