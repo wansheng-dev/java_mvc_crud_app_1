@@ -17,12 +17,15 @@ import com.ch3.pt2.bookdemo.services.BookService;
 
 @Controller
 public class BooksController {
+	
+	// Dependency injection
     private final BookService bookService;
     
     public BooksController(BookService bookService) {
         this.bookService = bookService;
     }
     
+    // render all books page
     @RequestMapping("/books")
     public String index(Model model) {
         List<Book> books = bookService.allBooks();
@@ -30,11 +33,13 @@ public class BooksController {
         return "books/index.jsp";
     }
     
+    // render create a new book page
     @RequestMapping("/books/new")
     public String newBook(@ModelAttribute("book") Book book) {
         return "/books/new.jsp";
     }
     
+    // post route for creating a new book
     @RequestMapping(value="/books", method=RequestMethod.POST)
     public String create(@Valid @ModelAttribute("book") Book book, BindingResult result) {
         if (result.hasErrors()) {
@@ -45,15 +50,39 @@ public class BooksController {
         }
     }
     
+    // render view a book page
     @RequestMapping("/books/{id}")
     public String show(@PathVariable("id") Long id, Model book) {
     	Book result = bookService.findBook(id);
-    	book.addAttribute("title", result.getTitle());
-    	book.addAttribute("description", result.getDescription());
-    	book.addAttribute("language", result.getLanguage());
-    	book.addAttribute("numberOfPages", result.getNumberOfPages());
-    	System.out.println(book);
+    	book.addAttribute("book", result);
     	return "/books/show.jsp";
+    }
+    
+    // render edit a book page
+    @RequestMapping("/books/{id}/edit")
+    public String edit(@PathVariable("id") Long id, Model model) {
+        Book book = bookService.findBook(id);
+        model.addAttribute("book", book);
+        return "/books/edit.jsp";
+    }
+    
+    // put request for updating a book
+    @RequestMapping(value="/books/{id}", method=RequestMethod.PUT)
+    public String update(@Valid @ModelAttribute("book") Book book, BindingResult result) {
+    	System.out.println(book);
+        if (result.hasErrors()) {
+            return "/books/edit.jsp";
+        } else {
+            bookService.updateBook(book);
+            return "redirect:/books";
+        }
+    }
+    
+    // delete request for deleting a book
+    @RequestMapping(value="/books/{id}", method=RequestMethod.DELETE)
+    public String destroy(@PathVariable("id") Long id) {
+        bookService.deleteBook(id);
+        return "redirect:/books";
     }
     
 }

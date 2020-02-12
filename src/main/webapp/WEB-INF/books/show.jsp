@@ -9,10 +9,10 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h1><c:out value="${title}"/></h1>
-	<p>Description: <c:out value="${description}"/></p>
-	<p>Language: <c:out value="${language}"/></p>
-	<p>Number of pages: <c:out value="${numberOfPages}"/></p>
+	<h1><c:out value="${book.title}"/></h1>
+	<p>Description: <c:out value="${book.description}"/></p>
+	<p>Language: <c:out value="${book.language}"/></p>
+	<p>Number of pages: <c:out value="${book.numberOfPages}"/></p>
 	<a href="/books/${book.id}/edit">Edit Book</a>
 	<form action="/books/${book.id}" method="post">
 	    <input type="hidden" name="_method" value="delete">
